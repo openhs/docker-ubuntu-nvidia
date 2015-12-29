@@ -12,7 +12,7 @@ FROM ubuntu
 
 
 MAINTAINER openhs
-LABEL version = "0.2.0" \
+LABEL version = "0.2.1" \
       description = "Base Ubuntu image with nVidia graphics driver."
 
 
@@ -24,7 +24,9 @@ RUN /bin/echo -e \
          /etc/apt/sources.list && \
     apt-get update
 
-ARG default_nvidia_version=352
+# Docker Hub does not grok ARG
+#ARG default_nvidia_version=352
+ENV default_nvidia_version=352
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     nvidia-${default_nvidia_version} \
