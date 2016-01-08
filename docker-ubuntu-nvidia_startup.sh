@@ -56,5 +56,6 @@ if ls /dev/snd/pcm* > /dev/null 2>&1; then
     fi
 fi
 
-echo "starting the application ${application} ${@}"
-su - --shell /bin/sh --command "\"${application} ${@}\"" ${USER}
+applicationWithArguments="${application} ${@}"
+echo "starting the application ${applicationWithArguments}"
+su - --shell /bin/sh --command "${applicationWithArguments}" ${USER}

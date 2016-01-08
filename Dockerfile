@@ -12,7 +12,7 @@ FROM ubuntu
 
 
 MAINTAINER openhs
-LABEL version = "0.3.0" \
+LABEL version = "0.3.1" \
       description = "Base Ubuntu image with nVidia graphics driver."
 
 
