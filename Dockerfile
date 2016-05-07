@@ -12,25 +12,26 @@ FROM ubuntu
 
 
 MAINTAINER openhs
-LABEL version = "0.3.1" \
+LABEL version = "0.4.0" \
       description = "Base Ubuntu image with nVidia graphics driver."
 
 
 
 RUN /bin/echo -e \
-      "deb http://archive.ubuntu.com/ubuntu/ trusty multiverse\n \
-       deb http://archive.ubuntu.com/ubuntu/ trusty-updates multiverse\n \
-       deb http://archive.ubuntu.com/ubuntu/ trusty-security multiverse" >> \
+      "deb http://archive.ubuntu.com/ubuntu/ xenial multiverse\n \
+       deb http://archive.ubuntu.com/ubuntu/ xenial-updates multiverse\n \
+       deb http://archive.ubuntu.com/ubuntu/ xenial-security multiverse" >> \
          /etc/apt/sources.list && \
     apt-get update
 
-# Docker Hub does not grok ARG
-#ARG default_nvidia_version=352
-ENV default_nvidia_version=352
+ARG default_nvidia_version=361
+ENV NVIDIA_DRIVER_VERSION=${default_nvidia_version}
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     nvidia-${default_nvidia_version} \
-    xauth
+    xauth \
+    # nvidia depends on initramfs-tools
+    initramfs-tools
 
 RUN useradd --shell /bin/false --create-home appuser
 

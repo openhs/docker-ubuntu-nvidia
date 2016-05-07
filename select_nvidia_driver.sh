@@ -21,7 +21,7 @@ fi
 
 
 
-driver=nvidia-${NVIDIA_DRIVER_VERSION:-352}
+driver=nvidia-${NVIDIA_DRIVER_VERSION}
 if ! dpkg-query --status ${driver} > /dev/null 2>&1; then
     echo "Installing ${driver}."
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ${driver}
