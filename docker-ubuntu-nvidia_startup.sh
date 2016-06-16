@@ -4,7 +4,7 @@
 #
 # Startup script for the container.
 #
-# Project: docker-firefox-ubuntu
+# Project: docker-ubuntu-nvidia
 # License: GNU GPLv3
 #
 # Copyright (C) 2015 - 2016 Robert Cernansky
@@ -31,31 +31,10 @@ EOF
   exit 0
 fi
 
-application=${1:-/bin/bash}
-shift
-
 echo "ensuring nVidia driver is installed"
 /opt/select_nvidia_driver.sh
-
-echo "adding authorization token for X server"
-/opt/setup_access_to_host_display.sh ${USER}
 
 echo "ensuring that the user is in the video group"
 /opt/add_user_to_video_group.sh ${USER}
 
-if ls /dev/snd/pcm* > /dev/null 2>&1; then
-    echo "ensuring that the user is in the audio group"
-
-    audioGroupId=$(stat -c %g /dev/snd/pcm* | head -n 1)
-    if ! grep -q :${audioGroupId}: /etc/group; then
-        groupadd --gid ${audioGroupId} audio_${USER}
-    fi
-    audioGroup=$(stat -c %G /dev/snd/pcm* | head -n 1)
-    if ! id -G ${USER} | grep -qw ${audioGroupId}; then
-        usermod -a -G ${audioGroupId} ${USER}
-    fi
-fi
-
-applicationWithArguments="${application} ${@}"
-echo "starting the application ${applicationWithArguments}"
-su - --shell /bin/sh --command "${applicationWithArguments}" ${USER}
+/opt/docker-ubuntu-x_startup.sh ${@}
